@@ -3,10 +3,8 @@ import time
 
 # アーティストが入力した制限値を取得
 try:
-    # Widgetから渡された値を処理
     triangle_limit_raw = {triangle_limit}
-    
-    # 型に応じて適切に変換
+
     if isinstance(triangle_limit_raw, set) and len(triangle_limit_raw) > 0:
         element = next(iter(triangle_limit_raw))
         if isinstance(element, (int, float)):
@@ -27,7 +25,6 @@ except Exception as e:
 
 # 選択されたアセットの三角形数をチェック
 def check_triangle_count():
-    # 現在選択されているアセットを取得
     selected_assets = unreal.EditorUtilityLibrary.get_selected_assets()
     
     if len(selected_assets) == 0:
@@ -42,17 +39,14 @@ def check_triangle_count():
         return
     
     unreal.log(f"選択された {len(static_meshes)} 個のStatic Meshをチェックしています...")
-    
-    # 制限超過アセットのリスト
+
     over_limit_assets = []
     
     # 各アセットをチェック
     for sm in static_meshes:
         try:
-            # 三角形数を取得 (LOD 0)
             triangle_count = sm.get_num_triangles(0)
             
-            # 結果を表示
             if triangle_count > triangle_limit:
                 over_limit_assets.append((sm, triangle_count))
                 unreal.log(f"× 制限超過: {sm.get_name()} - {triangle_count} 三角形 (制限より {triangle_count - triangle_limit} 超過)")
@@ -71,5 +65,4 @@ def check_triangle_count():
     else:
         unreal.log("すべてのアセットが制限内です。")
 
-# 関数を実行
 check_triangle_count()
